@@ -51,6 +51,8 @@
         owner: root
         group: root
         mode: '0644'
+      shell: |
+          /usr/bin/md5sum /etc/apache2/sites-available/default-ssl.conf
 
     - name: Test and Reload Apache
       shell: |

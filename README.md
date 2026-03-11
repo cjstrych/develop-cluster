@@ -7,6 +7,7 @@
 /etc/apache2/conf-available/userportal.conf  
 /etc/apache2/sites-available/000-default.conf  
 /etc/apache2/sites-available/default-ssl.conf  
+/var/www/html/constants.php  
 
 ### shorewall
 /etc/shorewall/rules  

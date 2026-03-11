@@ -7,7 +7,7 @@
   ######## /etc/shorewall/rules
     - name: /etc/shorewall/rules
       copy:
-        src: files/shorewall/rules
+        src: _etc/shorewall/rules
         dest: /etc/shorewall/rules
         owner: root
         group: root
@@ -30,3 +30,4 @@
     - name: Test and Restart Shorewall Firewall
       shell: |
         /usr/sbin/shorewall check && systemctl restart shorewall.service
+

@@ -1,0 +1,32 @@
+---
+- name: Shorewall Firewall Configuration File(s) Synchronization
+  hosts: all
+  become: yes
+  
+  tasks:
+  ######## /etc/shorewall/rules
+    - name: /etc/shorewall/rules
+      copy:
+        src: files/shorewall/rules
+        dest: /etc/shorewall/rules
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Calculate md5sum /etc/shorewall/rules
+      shell: |
+          /usr/bin/md5sum /etc/shorewall/rules
+      register: md5sum_output
+
+    - name: Display md5sum /etc/shorewall/rules
+      debug:
+        msg: "{{ md5sum_output.stdout }}"
+###############################################################################
+
+###############################################################################
+######## End of Configuration File(s) Synchronization
+###############################################################################
+
+    - name: Test and Restart Shorewall Firewall
+      shell: |
+        /usr/sbin/shorewall check && systemctl restart shorewall.service

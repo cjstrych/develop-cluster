@@ -36,6 +36,7 @@
         group: root
         mode: '0644'
 
+######## /etc/apache2/sites-available/000-default.conf
     - name: /etc/apache2/sites-available/000-default.conf
       copy:
         src: files/000-default.conf
@@ -44,6 +45,18 @@
         group: root
         mode: '0644'
 
+    - name: Calculate md5sum /etc/apache2/sites-available/000-default.conf
+      shell: |
+          /usr/bin/md5sum /etc/apache2/sites-available/000-default.conf
+      register: md5sum_output
+
+    - name: Display md5sum /etc/apache2/sites-available/000-default.conf
+      debug:
+        msg: "{{ md5sum_output.stdout }}"
+
+###############################################################################
+
+######## /etc/apache2/sites-available/default-ssl.conf
     - name: /etc/apache2/sites-available/default-ssl.conf
       copy:
         src: files/default-ssl.conf
@@ -52,14 +65,16 @@
         group: root
         mode: '0644'
 
-    - name: md5sum /etc/apache2/sites-available/default-ssl.conf
+    - name: Calculate md5sum /etc/apache2/sites-available/default-ssl.conf
       shell: |
           /usr/bin/md5sum /etc/apache2/sites-available/default-ssl.conf
       register: md5sum_output
 
-    - name: Display md5sum
+    - name: Display md5sum /etc/apache2/sites-available/default-ssl.conf
       debug:
         msg: "{{ md5sum_output.stdout }}"
+
+###############################################################################
 
     - name: Test and Reload Apache
       shell: |

@@ -1,6 +1,6 @@
 # develop-cluster
 
-### apache2
+### Apache HTTP Server Configuration
 /etc/apache2/ports.conf  
 /etc/apache2/conf-available/api.conf  
 /etc/apache2/conf-available/base-view.conf  
@@ -11,5 +11,5 @@
 ### Apache HTTP Server Web Content
 /var/www/html/constants.php  
 
-### shorewall
+### Shorewall Firewall Configuration
 /etc/shorewall/rules  

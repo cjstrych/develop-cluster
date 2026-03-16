@@ -1,132 +1,29 @@
 ---
-- name: Apache HTTP Server Configuration File(s) Synchronization
+- name: Apache HTTP Server Configuration Synchronization
   hosts: all
   become: yes
 
+  vars:
+    apache2_configuration_files:
+      - ports.conf
+      - conf-available/api.conf
+      - conf-available/base-view.conf
+      - conf-available/userportal.conf
+      - sites-available/000-default.conf
+      - sites-available/default-ssl.conf
+
   tasks:
-######## /etc/apache2/ports.conf
-    - name: /etc/apache2/ports.conf
+    - name: Synchronize Apache HTTP Server Configuration Files
       copy:
-        src: _etc/apache2/ports.conf
-        dest: /etc/apache2/ports.conf
+        # Implicitly Sourced FROM: ./files/ via Ansible Search Path
+        # https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbook_pathing.html#config-paths
+        # Maintains Directory Parity Between Source and Destination
+        src: "etc/apache2/{{ item }}"
+        dest: "/etc/apache2/{{ item }}"
         owner: root
         group: root
         mode: '0644'
-
-    - name: Calculate md5sum /etc/apache2/ports.conf
-      shell: |
-          /usr/bin/md5sum /etc/apache2/ports.conf
-      register: md5sum_output
-
-    - name: Display md5sum /etc/apache2/ports.conf
-      debug:
-        msg: "{{ md5sum_output.stdout }}"
-###############################################################################
-
-
-######## /etc/apache2/conf-available/api.conf
-    - name: /etc/apache2/conf-available/api.conf
-      copy:
-        src: _etc/apache2/conf-available/api.conf
-        dest: /etc/apache2/conf-available/api.conf
-        owner: root
-        group: root
-        mode: '0644'
-
-    - name: Calculate md5sum /etc/apache2/conf-available/api.conf
-      shell: |
-          /usr/bin/md5sum /etc/apache2/conf-available/api.conf
-      register: md5sum_output
-
-    - name: Display md5sum /etc/apache2/conf-available/api.conf
-      debug:
-        msg: "{{ md5sum_output.stdout }}"
-###############################################################################
-
-
-######## /etc/apache2/conf-available/base-view.conf
-    - name: /etc/apache2/conf-available/base-view.conf
-      copy:
-        src: _etc/apache2/conf-available/base-view.conf
-        dest: /etc/apache2/conf-available/base-view.conf
-        owner: root
-        group: root
-        mode: '0644'
-
-    - name: Calculate md5sum /etc/apache2/conf-available/base-view.conf
-      shell: |
-          /usr/bin/md5sum /etc/apache2/conf-available/base-view.conf
-      register: md5sum_output
-
-    - name: Display md5sum /etc/apache2/conf-available/base-view.conf
-      debug:
-        msg: "{{ md5sum_output.stdout }}"
-###############################################################################
-
-
-######## /etc/apache2/conf-available/userportal.conf
-    - name: /etc/apache2/conf-available/userportal.conf
-      copy:
-        src: _etc/apache2/conf-available/userportal.conf
-        dest: /etc/apache2/conf-available/userportal.conf
-        owner: root
-        group: root
-        mode: '0644'
-
-    - name: Calculate md5sum /etc/apache2/conf-available/userportal.conf
-      shell: |
-          /usr/bin/md5sum /etc/apache2/conf-available/userportal.conf
-      register: md5sum_output
-
-    - name: Display md5sum /etc/apache2/conf-available/userportal.conf
-      debug:
-        msg: "{{ md5sum_output.stdout }}"
-###############################################################################
-
-
-######## /etc/apache2/sites-available/000-default.conf
-    - name: /etc/apache2/sites-available/000-default.conf
-      copy:
-        src: _etc/apache2/sites-available/000-default.conf
-        dest: /etc/apache2/sites-available/000-default.conf
-        owner: root
-        group: root
-        mode: '0644'
-
-    - name: Calculate md5sum /etc/apache2/sites-available/000-default.conf
-      shell: |
-          /usr/bin/md5sum /etc/apache2/sites-available/000-default.conf
-      register: md5sum_output
-
-    - name: Display md5sum /etc/apache2/sites-available/000-default.conf
-      debug:
-        msg: "{{ md5sum_output.stdout }}"
-###############################################################################
-
-
-######## /etc/apache2/sites-available/default-ssl.conf
-    - name: /etc/apache2/sites-available/default-ssl.conf
-      copy:
-        src: _etc/apache2/sites-available/default-ssl.conf
-        dest: /etc/apache2/sites-available/default-ssl.conf
-        owner: root
-        group: root
-        mode: '0644'
-
-    - name: Calculate md5sum /etc/apache2/sites-available/default-ssl.conf
-      shell: |
-          /usr/bin/md5sum /etc/apache2/sites-available/default-ssl.conf
-      register: md5sum_output
-
-    - name: Display md5sum /etc/apache2/sites-available/default-ssl.conf
-      debug:
-        msg: "{{ md5sum_output.stdout }}"
-###############################################################################
-
-###############################################################################
-######## End of Configuration File(s) Synchronization
-###############################################################################
-
+      loop: "{{ apache2_configuration_files }}"
 
     - name: Test and Reload Apache
       shell: |

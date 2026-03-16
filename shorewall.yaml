@@ -1,31 +1,25 @@
 ---
-- name: Shorewall Firewall Configuration File(s) Synchronization
+- name: Shorewall Firewall Configuration Synchronization
   hosts: all
   become: yes
-  
+
+  vars:
+    shorewall_configuration_files:
+      - rules
+
   tasks:
-  ######## /etc/shorewall/rules
-    - name: /etc/shorewall/rules
+    - name: Synchronize Shorewall Firewall Configuration Files
       copy:
-        src: _etc/shorewall/rules
-        dest: /etc/shorewall/rules
+        # Implicitly Sourced FROM: ./files/ via Ansible Search Path
+        # https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbook_pathing.html#config-paths
+        # Maintains Directory Parity Between Source and Destination
+        src: "etc/shorewall/{{ item }}"
+        dest: "/etc/shorewall/{{ item }}"
         owner: root
         group: root
         mode: '0644'
+      loop: "{{ shorewall_configuration_files }}"
 
-    - name: Calculate md5sum /etc/shorewall/rules
-      shell: |
-          /usr/bin/md5sum /etc/shorewall/rules
-      register: md5sum_output
-
-    - name: Display md5sum /etc/shorewall/rules
-      debug:
-        msg: "{{ md5sum_output.stdout }}"
-###############################################################################
-
-###############################################################################
-######## End of Configuration File(s) Synchronization
-###############################################################################
 
     - name: Test and Restart Shorewall Firewall
       shell: |

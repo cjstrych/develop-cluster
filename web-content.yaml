@@ -6,6 +6,9 @@
   tasks:
     - name: Web Content Synchronization
       ansible.builtin.copy:
+        # Implicitly Sourced FROM: ./files/ via Ansible Search Path
+        # https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbook_pathing.html#config-paths
+        # Maintains Directory Parity Between Source and Destination
         src: var/www/html/
         dest: /var/www/html/
         owner: "root"
